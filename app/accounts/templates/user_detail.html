@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}User Detail{% endblock %}
+{% block content %}
+<div class="user_info">
+    <div class="user_pic">
+        <img src="{{ user.avatar.url }}" alt="{{ user.username }} avatar">
+    </div>
+    <div class="user_inf">
+        <p>{{ user.username }}</p>
+        <p>{{ user.first_name }}</p>
+        <p>{{ user.description }}</p>
+    </div>
+</div>
+<div class="posts_list">
+    {% for post in posts %}
+    <div class="post">
+        <div class="post_img_link">
+            <a href="#"><img src="{{ post.img }}" alt="{{ post.description }} img"></a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

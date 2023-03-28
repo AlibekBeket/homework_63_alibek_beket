@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Posts List{% endblock %}
+{% block content %}
+{% for post in posts %}
+<div class="post">
+    <p><a href="#">{{ post.img.url }}</a></p>
+    <p>{{ post.description }}</p>
+</div>
+{% endfor %}
+<div class="bottom_indent"></div>
+{% endblock %}

@@ -28,11 +28,8 @@ class CustomUserCreationForm(forms.ModelForm):
         email = cleaned_data.get('email')
         if not email:
             raise forms.ValidationError('Почта обязательное поле')
-        email = cleaned_data.get('avatar')
-        if not email:
-            raise forms.ValidationError('Аватарка обязательное поле')
-        email = cleaned_data.get('username')
-        if not email:
+        username = cleaned_data.get('username')
+        if not username:
             raise forms.ValidationError('Логин обязательное поле')
 
     def save(self, commit=True):

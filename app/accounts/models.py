@@ -63,11 +63,13 @@ class Account(AbstractUser):
     )
     liked_posts = models.ManyToManyField(
         to='instagram.Posts',
+        blank=True,
         verbose_name='Понравившиеся публикации',
         related_name='user_likes'
     )
     subscriptions = models.ManyToManyField(
         to='accounts.Account',
+        blank=True,
         verbose_name='Подписки',
         related_name='subscription'
     )
