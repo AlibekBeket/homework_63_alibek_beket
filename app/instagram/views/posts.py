@@ -1,6 +1,13 @@
-from django.views.generic import ListView
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.utils.http import urlencode
+from django.views.generic import ListView, CreateView, TemplateView, DetailView
 
 from instagram.models import Posts
+
+from instagram.forms import PostsForm
+
+from accounts.models import Account
 
 
 class PostsListView(ListView):
@@ -14,3 +21,48 @@ class PostsListView(ListView):
         context['user'] = self.request.user
         context['posts'] = Posts.objects.all()
         return context
+
+
+class PostAddView(CreateView):
+    template_name = 'post_create.html'
+    model = Posts
+    form_class = PostsForm
+
+    def get_success_url(self):
+        return reverse('posts_list')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            request.user.number_of_publications += 1
+            user = self.request.user
+            description = form.cleaned_data.get('description')
+            img = form.cleaned_data.get('img')
+            Posts.objects.create(user=user, description=description, img=img)
+            return redirect(reverse('account_list', kwargs={'pk': self.request.user.pk}))
+        return render(request, 'post_create.html',
+                      context={'form': form, 'user': self.request.user})
+
+
+class LikePostView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        account = request.user
+        if Posts.objects.get(id=self.kwargs['pk']) in account.liked_posts.all():
+            account.liked_posts.remove(Posts.objects.get(id=self.kwargs['pk']))
+            post = Posts.objects.get(id=self.kwargs['pk'])
+            post.likes -= 1
+            post.save()
+            account.save()
+        else:
+            account.liked_posts.add(Posts.objects.get(id=self.kwargs['pk']))
+            post = Posts.objects.get(id=self.kwargs['pk'])
+            post.likes += 1
+            post.save()
+            account.save()
+        return redirect('posts_list')
+
+
+class PostDetailView(DetailView):
+    template_name = 'post_detail.html'
+    model = Posts
+    context_object_name = 'post'
