@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -24,7 +25,7 @@ class PostsListView(ListView):
         return context
 
 
-class PostAddView(CreateView):
+class PostAddView(LoginRequiredMixin, CreateView):
     template_name = 'post_create.html'
     model = Posts
     form_class = PostsForm
@@ -45,7 +46,7 @@ class PostAddView(CreateView):
                       context={'form': form, 'user': self.request.user})
 
 
-class LikePostView(TemplateView):
+class LikePostView(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         account = request.user
         if Posts.objects.get(id=self.kwargs['pk']) in account.liked_posts.all():
@@ -74,7 +75,7 @@ class PostDetailView(DetailView):
         return context
 
 
-class CommentAddView(CreateView):
+class CommentAddView(LoginRequiredMixin, CreateView):
     template_name = 'comment_create.html'
     model = Comments
     form_class = CommentsForm

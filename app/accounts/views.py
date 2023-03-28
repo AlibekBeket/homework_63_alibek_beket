@@ -1,8 +1,7 @@
-from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.db.models import Q
-from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.http import urlencode
 from django.views.generic import TemplateView, CreateView, ListView, DetailView
 
 from accounts.forms import LoginForm, CustomUserCreationForm
@@ -11,7 +10,6 @@ from instagram.models import Posts
 
 from accounts.models import Account
 
-from instagram.forms import SearchForm
 
 
 # Create your views here.
@@ -70,6 +68,9 @@ class AccountView(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['posts'] = Posts.objects.filter(user=Account.objects.get(id=self.kwargs['pk']))
+        context['not_my_page'] = False
+        if self.kwargs['pk'] != self.request.user.pk:
+            context['not_my_page'] = True
         return context
 
 
@@ -79,7 +80,7 @@ class AccountsListView(ListView):
     context_object_name = 'accounts'
 
 
-class AccountsSubView(TemplateView):
+class AccountsSubView(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         account = request.user
         if account in Account.object.get(pk=self.kwargs['pk']).subscriptions.all():
