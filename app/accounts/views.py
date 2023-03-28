@@ -69,8 +69,11 @@ class AccountView(DetailView):
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['posts'] = Posts.objects.filter(user=Account.objects.get(id=self.kwargs['pk']))
         context['not_my_page'] = False
+        context['sub'] = False
         if self.kwargs['pk'] != self.request.user.pk:
             context['not_my_page'] = True
+        if self.request.user == Account.objects.get(id=self.kwargs['pk']):
+            context['sub'] = True
         return context
 
 

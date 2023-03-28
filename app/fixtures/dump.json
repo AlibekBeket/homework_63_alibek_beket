@@ -1,0 +1,46 @@
+[
+{
+  "model": "instagram.posts",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "description": "dfdsadhfsgdgh",
+    "img": "post_img/171203-purpur-raduga-fioletovyj-elektrik-purpurnyj_cvet-3840x2160.jpg",
+    "likes": 2,
+    "comments": 2,
+    "created_at": "2023-03-28T08:39:57.445Z"
+  }
+},
+{
+  "model": "instagram.posts",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "description": "Hello World",
+    "img": "post_img/171203-purpur-raduga-fioletovyj-elektrik-purpurnyj_cvet-3840x2160_tE57lFt.jpg",
+    "likes": 0,
+    "comments": 0,
+    "created_at": "2023-03-28T11:41:02.428Z"
+  }
+},
+{
+  "model": "instagram.comments",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "description": "Hello world",
+    "post": 1,
+    "created_at": "2023-03-28T10:56:30.229Z"
+  }
+},
+{
+  "model": "instagram.comments",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "description": "dfhdgfh",
+    "post": 1,
+    "created_at": "2023-03-28T10:56:39.430Z"
+  }
+}
+]
