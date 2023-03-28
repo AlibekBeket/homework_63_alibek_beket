@@ -35,6 +35,10 @@ class Posts(models.Model):
         verbose_name="Количество комментариев в посте",
         default=0
     )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата публикации поста'
+    )
 
     def __str__(self):
         return f'{self.user} - {self.likes}'

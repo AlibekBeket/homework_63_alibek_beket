@@ -61,6 +61,16 @@ class Account(AbstractUser):
         verbose_name="Количество подписчиков",
         default=0
     )
+    liked_posts = models.ManyToManyField(
+        to='instagram.Posts',
+        verbose_name='Понравившиеся публикации',
+        related_name='user_likes'
+    )
+    subscriptions = models.ManyToManyField(
+        to='accounts.Account',
+        verbose_name='Подписки',
+        related_name='subscription'
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -25,11 +25,9 @@ class Comments(models.Model):
         verbose_name='Пост',
         on_delete=models.CASCADE
     )
-    likes = models.IntegerField(
-        null=False,
-        blank=False,
-        verbose_name="Количество лайков в посте",
-        default=0
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата создания комментария'
     )
 
     def __str__(self):
