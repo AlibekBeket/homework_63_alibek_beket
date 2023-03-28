@@ -20,4 +20,13 @@
         </p>
     </div>
 </div>
+<div class="comments_list">
+    {% for comment in comments %}
+    <div class="comment_str">
+        <a href="{% url 'account_list' comment.user.pk %}">{{ comment.user.username }}</a>
+        <p>{{ comment.description }}</p>
+    </div>
+    {% endfor %}
+</div>
+<a href="{% url 'comment_add' post.pk %}">Comment Create</a>
 {% endblock %}

@@ -51,9 +51,23 @@ body{
 .logo{
     font-size: 30px;
 }
-.search{
-    margin: 0 400px;
-}
 .logo_slush{
     margin-left: 20px;
+}
+.post_img_link img{
+    width: 1000px;
+}
+.post img{
+    width: 1000px;
+}
+.user_pic img{
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+}
+.accounts img{
+    width: 100px;
+}
+.bottom_indent{
+    margin-bottom: 100px;
 }

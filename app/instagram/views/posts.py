@@ -1,11 +1,12 @@
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import urlencode
 from django.views.generic import ListView, CreateView, TemplateView, DetailView
 
-from instagram.models import Posts
+from instagram.models import Posts, Comments
 
-from instagram.forms import PostsForm
+from instagram.forms import PostsForm, CommentsForm
 
 from accounts.models import Account
 
@@ -66,3 +67,35 @@ class PostDetailView(DetailView):
     template_name = 'post_detail.html'
     model = Posts
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comments.objects.filter(post=Posts.objects.get(pk=self.kwargs['pk']))
+        return context
+
+
+class CommentAddView(CreateView):
+    template_name = 'comment_create.html'
+    model = Comments
+    form_class = CommentsForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post_pk'] = self.kwargs['pk']
+        return context
+
+    def get_success_url(self):
+        return reverse('post_detail', kwargs=self.kwargs['pk'])
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            post = Posts.objects.get(id=self.kwargs['pk'])
+            post.comments += 1
+            post.save()
+            user = self.request.user
+            description = form.cleaned_data.get('description')
+            Comments.objects.create(user=user, description=description, post=post)
+            return redirect(reverse('post_detail', kwargs={'pk': self.kwargs['pk']}))
+        return render(request, 'comment_create.html',
+                      context={'form': form, 'user': self.request.user})
